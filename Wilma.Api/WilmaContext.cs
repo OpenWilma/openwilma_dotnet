@@ -2,21 +2,21 @@
 
 using Wilma.Api.Wilma;
 
-namespace Wilma.Api.Web
+namespace Wilma.Api
 {
-    public class WilmaApiContext
+    public class WilmaContext
     {
         private const string MISSING_API_KEY = "You have to specify the API key";
 
-        public Uri BaseUri { get; }
+        public string Url { get; }
         public string Key { get; }
 
-        public WilmaApiContext(WilmaServer server, string key)
+        public WilmaContext(WilmaServer server, string key)
             : this(server.Url, key)
         { }
-        public WilmaApiContext(string url, string key)
+        public WilmaContext(string url, string key)
         {
-            BaseUri = new Uri(url);
+            Url = url;
             Key = key ?? throw new ArgumentNullException(MISSING_API_KEY);
         }
     }
