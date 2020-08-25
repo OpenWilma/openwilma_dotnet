@@ -1,2 +1,15 @@
-# Wilma.Api ![Build](https://github.com/PaulusParssinen/Wilma.Api/workflows/Build/badge.svg)
+# Wilma.Api ![Build](https://github.com/OpenWilma/openwilma_dotnet/workflows/Build/badge.svg)
 Unofficial .NET Standard 2.1 API wrapper for Wilma
+
+## Usage
+### Prerequisites
+- **An API key**
+
+### Setup
+- TODO: Create NuGet Package
+
+### Example snippets
+- TODO: ^
+
+
+
