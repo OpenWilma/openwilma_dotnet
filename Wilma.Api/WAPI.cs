@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Wilma.Api
 {
     public static class WAPI
     {
-        private const string USER_AGENT = "Wilma.Api v1 (github.com/PaulusParssinen/Wilma.Api)";
+        private const string USER_AGENT = "Wilma.Api v1 (https://github.com/OpenWilma/openwilma_dotnet)";
         private const string OFFICIAL_SERVERS_ENDPOINT = "https://www.starsoft.fi/wilmat/wilmat.json";
 
         private readonly static HttpClient _client;
@@ -31,6 +32,7 @@ namespace Wilma.Api
                 PropertyNameCaseInsensitive = true
             };
             _serializerOptions.Converters.Add(new DateTimeConverter());
+            _serializerOptions.Converters.Add(new NestedArrayConverter<Message>());
             _serializerOptions.Converters.Add(new NestedArrayConverter<MessageRecord>());
             _serializerOptions.Converters.Add(new NestedArrayConverter<WilmaServer>());
         }
@@ -40,7 +42,7 @@ namespace Wilma.Api
         /// </summary>
         public static Task<IEnumerable<WilmaServer>> GetOfficialServersAsync() => GetAsync<IEnumerable<WilmaServer>>(OFFICIAL_SERVERS_ENDPOINT);
 
-        private static string GetQueryString(IDictionary<string, object> parameters)
+        private static string GetQueryString(IEnumerable<KeyValuePair<string, object>> parameters)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
             foreach (var (key, value) in parameters)
@@ -51,10 +53,10 @@ namespace Wilma.Api
         }
 
         public static HttpRequestMessage CreateRequest(HttpMethod method, string path,
-            IDictionary<string, object> queryParameters = default,
+            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
             IEnumerable<KeyValuePair<string, string>> parameters = default)
         {
-            if (queryParameters?.Count > 0)
+            if (queryParameters?.Count() > 0)
                 path += GetQueryString(queryParameters);
 
             var request = new HttpRequestMessage(method, path);
@@ -65,7 +67,7 @@ namespace Wilma.Api
             return request;
         }
         public static HttpRequestMessage CreateRequest(WilmaSession session, HttpMethod method, string path,
-            IDictionary<string, object> queryParameters = default,
+            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
             IEnumerable<KeyValuePair<string, string>> parameters = default)
         {
             var request = CreateRequest(session.Context, method, path, queryParameters, parameters);
@@ -73,7 +75,7 @@ namespace Wilma.Api
             return request;
         }
         public static HttpRequestMessage CreateRequest(WilmaContext context, HttpMethod method, string path,
-           IDictionary<string, object> queryParameters = default,
+           IEnumerable<KeyValuePair<string, object>> queryParameters = default,
            IEnumerable<KeyValuePair<string, string>> parameters = default)
         {
             queryParameters ??= new Dictionary<string, object>();
@@ -96,8 +98,14 @@ namespace Wilma.Api
             return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
         }
 
+        public static async Task<HttpResponseMessage> GetAsync(WilmaContext context, string path,
+            IEnumerable<KeyValuePair<string, object>> queryParameters = default)
+        {
+            using var request = CreateRequest(context, HttpMethod.Get, path, queryParameters);
+            return await _client.SendAsync(request).ConfigureAwait(false);
+        }
         public static async Task<T> GetAsync<T>(WilmaContext context, string path,
-            IDictionary<string, object> queryParameters = default,
+            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
             Func<HttpContent, Task<T>> contentDeserializer = default)
         {
             using var request = CreateRequest(context, HttpMethod.Get, path, queryParameters);
@@ -106,8 +114,14 @@ namespace Wilma.Api
             return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
         }
 
+        public static async Task<HttpResponseMessage> GetAsync(WilmaSession session, string path,
+            IEnumerable<KeyValuePair<string, object>> queryParameters = default)
+        {
+            using var request = CreateRequest(session, HttpMethod.Get, path, queryParameters);
+            return await _client.SendAsync(request).ConfigureAwait(false);
+        }
         public static async Task<T> GetAsync<T>(WilmaSession session, string path,
-            IDictionary<string, object> queryParameters = default,
+            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
             Func<HttpContent, Task<T>> contentDeserializer = default)
         {
             using var request = CreateRequest(session, HttpMethod.Get, path, queryParameters);
@@ -117,15 +131,15 @@ namespace Wilma.Api
         }
 
         public static async Task<HttpResponseMessage> PostAsync(WilmaSession session, string path,
-            IDictionary<string, string> parameters = default,
-            IDictionary<string, object> queryParameters = default)
+            IEnumerable<KeyValuePair<string, string>> parameters = default,
+            IEnumerable<KeyValuePair<string, object>> queryParameters = default)
         {
             using var request = CreateRequest(session, HttpMethod.Post, path, queryParameters, parameters);
             return await _client.SendAsync(request).ConfigureAwait(false);
         }
         public static async Task<T> PostAsync<T>(WilmaSession session, string path,
-            IDictionary<string, string> parameters = default,
-            IDictionary<string, object> queryParameters = default,
+            IEnumerable<KeyValuePair<string, string>> parameters = default,
+            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
             Func<HttpContent, Task<T>> contentDeserializer = default)
         {
             using var request = CreateRequest(session, HttpMethod.Post, path, queryParameters, parameters);
@@ -135,14 +149,14 @@ namespace Wilma.Api
         }
 
         public static async Task<HttpResponseMessage> PostAsync(WilmaContext context, string path,
-            IDictionary<string, string> parameters = default,
+            IEnumerable<KeyValuePair<string, string>> parameters = default,
             IDictionary<string, object> queryParameters = default)
         {
             using var request = CreateRequest(context, HttpMethod.Post, path, queryParameters, parameters);
             return await _client.SendAsync(request).ConfigureAwait(false);
         }
         public static async Task<T> PostAsync<T>(WilmaContext context, string path,
-            IDictionary<string, string> parameters = default,
+            IEnumerable<KeyValuePair<string, string>> parameters = default,
             IDictionary<string, object> queryParameters = default,
             Func<HttpContent, Task<T>> contentDeserializer = default)
         {
