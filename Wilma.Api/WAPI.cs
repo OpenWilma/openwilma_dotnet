@@ -53,8 +53,8 @@ namespace Wilma.Api
         }
 
         public static HttpRequestMessage CreateRequest(HttpMethod method, string path,
-            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
-            IEnumerable<KeyValuePair<string, string>> parameters = default)
+            ICollection<KeyValuePair<string, object>> queryParameters = default,
+            ICollection<KeyValuePair<string, string>> parameters = default)
         {
             if (queryParameters?.Count() > 0)
                 path += GetQueryString(queryParameters);
@@ -67,18 +67,19 @@ namespace Wilma.Api
             return request;
         }
         public static HttpRequestMessage CreateRequest(WilmaSession session, HttpMethod method, string path,
-            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
-            IEnumerable<KeyValuePair<string, string>> parameters = default)
+            ICollection<KeyValuePair<string, object>> queryParameters = default,
+            ICollection<KeyValuePair<string, string>> parameters = default)
         {
             var request = CreateRequest(session.Context, method, path, queryParameters, parameters);
             request.Headers.Add("FormKey", session.FormKey);
             return request;
         }
         public static HttpRequestMessage CreateRequest(WilmaContext context, HttpMethod method, string path,
-           IEnumerable<KeyValuePair<string, object>> queryParameters = default,
-           IEnumerable<KeyValuePair<string, string>> parameters = default)
+           ICollection<KeyValuePair<string, object>> queryParameters = default,
+           ICollection<KeyValuePair<string, string>> parameters = default)
         {
             queryParameters ??= new Dictionary<string, object>();
+            queryParameters.Add(new KeyValuePair<string, object>("LangID", (int)context.Language));
 
             var request = new HttpRequestMessage(method,
                 context.Url + path + GetQueryString(queryParameters));
@@ -99,13 +100,13 @@ namespace Wilma.Api
         }
 
         public static async Task<HttpResponseMessage> GetAsync(WilmaContext context, string path,
-            IEnumerable<KeyValuePair<string, object>> queryParameters = default)
+            ICollection<KeyValuePair<string, object>> queryParameters = default)
         {
             using var request = CreateRequest(context, HttpMethod.Get, path, queryParameters);
             return await _client.SendAsync(request).ConfigureAwait(false);
         }
         public static async Task<T> GetAsync<T>(WilmaContext context, string path,
-            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
+            ICollection<KeyValuePair<string, object>> queryParameters = default,
             Func<HttpContent, Task<T>> contentDeserializer = default)
         {
             using var request = CreateRequest(context, HttpMethod.Get, path, queryParameters);
@@ -115,13 +116,13 @@ namespace Wilma.Api
         }
 
         public static async Task<HttpResponseMessage> GetAsync(WilmaSession session, string path,
-            IEnumerable<KeyValuePair<string, object>> queryParameters = default)
+            ICollection<KeyValuePair<string, object>> queryParameters = default)
         {
             using var request = CreateRequest(session, HttpMethod.Get, path, queryParameters);
             return await _client.SendAsync(request).ConfigureAwait(false);
         }
         public static async Task<T> GetAsync<T>(WilmaSession session, string path,
-            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
+            ICollection<KeyValuePair<string, object>> queryParameters = default,
             Func<HttpContent, Task<T>> contentDeserializer = default)
         {
             using var request = CreateRequest(session, HttpMethod.Get, path, queryParameters);
@@ -131,15 +132,15 @@ namespace Wilma.Api
         }
 
         public static async Task<HttpResponseMessage> PostAsync(WilmaSession session, string path,
-            IEnumerable<KeyValuePair<string, string>> parameters = default,
-            IEnumerable<KeyValuePair<string, object>> queryParameters = default)
+            ICollection<KeyValuePair<string, string>> parameters = default,
+            ICollection<KeyValuePair<string, object>> queryParameters = default)
         {
             using var request = CreateRequest(session, HttpMethod.Post, path, queryParameters, parameters);
             return await _client.SendAsync(request).ConfigureAwait(false);
         }
         public static async Task<T> PostAsync<T>(WilmaSession session, string path,
-            IEnumerable<KeyValuePair<string, string>> parameters = default,
-            IEnumerable<KeyValuePair<string, object>> queryParameters = default,
+            ICollection<KeyValuePair<string, string>> parameters = default,
+            ICollection<KeyValuePair<string, object>> queryParameters = default,
             Func<HttpContent, Task<T>> contentDeserializer = default)
         {
             using var request = CreateRequest(session, HttpMethod.Post, path, queryParameters, parameters);
@@ -149,14 +150,14 @@ namespace Wilma.Api
         }
 
         public static async Task<HttpResponseMessage> PostAsync(WilmaContext context, string path,
-            IEnumerable<KeyValuePair<string, string>> parameters = default,
+            ICollection<KeyValuePair<string, string>> parameters = default,
             IDictionary<string, object> queryParameters = default)
         {
             using var request = CreateRequest(context, HttpMethod.Post, path, queryParameters, parameters);
             return await _client.SendAsync(request).ConfigureAwait(false);
         }
         public static async Task<T> PostAsync<T>(WilmaContext context, string path,
-            IEnumerable<KeyValuePair<string, string>> parameters = default,
+            ICollection<KeyValuePair<string, string>> parameters = default,
             IDictionary<string, object> queryParameters = default,
             Func<HttpContent, Task<T>> contentDeserializer = default)
         {
