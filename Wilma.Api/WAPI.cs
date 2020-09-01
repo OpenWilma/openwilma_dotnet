@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web;
 using System.Net;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -31,9 +30,14 @@ namespace Wilma.Api
             {
                 PropertyNameCaseInsensitive = true
             };
+
             _serializerOptions.Converters.Add(new DateTimeConverter());
+            _serializerOptions.Converters.Add(new NullableDateTimeConverter());
+
             _serializerOptions.Converters.Add(new NestedArrayConverter<Message>());
             _serializerOptions.Converters.Add(new NestedArrayConverter<MessageRecord>());
+            _serializerOptions.Converters.Add(new NestedArrayConverter<News>());
+            _serializerOptions.Converters.Add(new NestedArrayConverter<NewsRecord>());
             _serializerOptions.Converters.Add(new NestedArrayConverter<WilmaServer>());
         }
 
@@ -56,12 +60,12 @@ namespace Wilma.Api
             ICollection<KeyValuePair<string, object>> queryParameters = default,
             ICollection<KeyValuePair<string, string>> parameters = default)
         {
-            if (queryParameters?.Count() > 0)
+            if (queryParameters?.Count > 0)
                 path += GetQueryString(queryParameters);
 
             var request = new HttpRequestMessage(method, path);
 
-            if (parameters != default)
+            if (parameters?.Count > 0)
                 request.Content = new FormUrlEncodedContent(parameters);
 
             return request;
@@ -84,7 +88,7 @@ namespace Wilma.Api
             var request = new HttpRequestMessage(method,
                 context.Url + path + GetQueryString(queryParameters));
 
-            if (parameters != default)
+            if (parameters?.Count > 0)
                 request.Content = new FormUrlEncodedContent(parameters);
 
             return request;
