@@ -35,6 +35,7 @@ namespace Wilma.Api
             _serializerOptions.Converters.Add(new NullableDateTimeConverter());
 
             _serializerOptions.Converters.Add(new NestedArrayConverter<Exam>());
+            _serializerOptions.Converters.Add(new NestedArrayConverter<Group>());
             _serializerOptions.Converters.Add(new NestedArrayConverter<Message>());
             _serializerOptions.Converters.Add(new NestedArrayConverter<MessageRecord>());
             _serializerOptions.Converters.Add(new NestedArrayConverter<News>());
