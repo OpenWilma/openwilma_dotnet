@@ -18,5 +18,11 @@ namespace Wilma.Api
 
         public Task<IEnumerable<Group>> GetGroupsAsync()
             => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json");
+        
+        public Task<IEnumerable<Group>> GetPastGroupsAsync()
+            => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json/past");
+        
+        public Task<IEnumerable<Group>> GetFutureGroupsAsync()
+            => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json/future");
     }
 }
