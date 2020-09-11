@@ -58,6 +58,25 @@ namespace Wilma.Api
         }
         
         /// <summary>
+        /// Send a password reset request to the email which linked to an Wilma user.
+        /// </summary>
+        /// <remarks>If your Wilma username is an email address, you only need to fill the <paramref name="email"/> parameter.<para/>
+        /// If your username is not an email address, also fill in the <paramref name="username"/> parameter.</remarks>
+        /// <param name="email">The email address of the user.</param>
+        /// <param name="username">The username of the user.</param>
+        public async Task<bool> ForgotPasswordAsync(string email, string username = "")
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "username", username },
+                { "email", email }
+            };
+
+            using var response = await WAPI.PostAsync(_context, "/forgotpasswd", parameters).ConfigureAwait(false);
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
         /// Fetch the Wilma session identifier which is required for authentication.
         /// </summary>
         private async Task<string> GetSessionIdAsync()
