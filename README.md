@@ -1,5 +1,5 @@
 # Wilma.Api ![Build](https://github.com/OpenWilma/openwilma_dotnet/workflows/Build/badge.svg)
-Unofficial .NET Standard 2.1 API wrapper for Wilma
+Unofficial .NET 5 API wrapper for Wilma
 
 ## Usage
 ### Prerequisites
