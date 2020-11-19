@@ -19,7 +19,7 @@ namespace Wilma.Api
         public WilmaContext(string url, string key, Language language = Language.English)
         {
             Url = url;
-            Key = key ?? throw new ArgumentNullException(MISSING_API_KEY);
+            Key = key ?? throw new ArgumentNullException(nameof(key), MISSING_API_KEY);
             Language = language;
         }
     }
