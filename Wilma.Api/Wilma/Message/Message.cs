@@ -27,7 +27,7 @@ namespace Wilma.Api.Wilma
         public bool AllowCollatedReply { get; set; }
         public bool IsEvent { get; set; }
 
-        public string ContentHTML { get; set; }
+        public string ContentHTML { get; set; } = default!;
 
         public EventData? EventData { get; set; }
         public IEnumerable<MessageReply>? ReplyList { get; set; }

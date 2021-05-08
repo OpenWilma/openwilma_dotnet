@@ -3,8 +3,10 @@ using System.Web;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 using Wilma.Api.Json;
 using Wilma.Api.Wilma;
@@ -14,7 +16,7 @@ namespace Wilma.Api
 {
     public static class WAPI
     {
-        private const string USER_AGENT = "Wilma.Api v1 (https://github.com/OpenWilma/openwilma_dotnet)";
+        private const string USER_AGENT = "OpenWilma/1.0.0.dotnet";
         private const string OFFICIAL_SERVERS_ENDPOINT = "https://www.starsoft.fi/wilmat/wilmat.json";
 
         private readonly static HttpClient _client;
@@ -28,9 +30,10 @@ namespace Wilma.Api
 
             _serializerOptions = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString
             };
-
+            
             _serializerOptions.Converters.Add(new DateTimeConverter());
             _serializerOptions.Converters.Add(new NullableDateTimeConverter());
 
@@ -86,6 +89,7 @@ namespace Wilma.Api
         {
             queryParameters ??= new Dictionary<string, object>();
             queryParameters.Add(new KeyValuePair<string, object>("LangID", (int)context.Language));
+            queryParameters.Add(new KeyValuePair<string, object>("format", "json"));
 
             var request = new HttpRequestMessage(method,
                 context.Url + path + GetQueryString(queryParameters));
@@ -172,7 +176,7 @@ namespace Wilma.Api
 
             return await DeserializeContentAsync(response, contentDeserializer).ConfigureAwait(false);
         }
-        
+
         public static async Task<T> DeserializeContentAsync<T>(this HttpResponseMessage response,
             Func<HttpContent, Task<T>> responseContentConverter = default)
         {
@@ -183,8 +187,7 @@ namespace Wilma.Api
 
                 if (response.Content.Headers.ContentType.MediaType == "application/json")
                 {
-                    var errorResponse = await JsonSerializer.DeserializeAsync<ErrorResponse>(
-                        await response.Content.ReadAsStreamAsync().ConfigureAwait(false), _serializerOptions).ConfigureAwait(false);
+                    var errorResponse = await response.Content.ReadFromJsonAsync<ErrorResponse>(_serializerOptions).ConfigureAwait(false);
 
                     exceptionMessage += $"{errorResponse.Error.StatusCode} - {errorResponse.Error.Id}\r\n";
                     exceptionMessage += $"{errorResponse.Error.Message} - {errorResponse.Error.Description}\r\n";
@@ -209,7 +212,7 @@ namespace Wilma.Api
                 return (T)(object)await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
 
             if (response.Content.Headers.ContentType.MediaType == "application/json")
-                return await JsonSerializer.DeserializeAsync<T>(await response.Content.ReadAsStreamAsync().ConfigureAwait(false), _serializerOptions).ConfigureAwait(false);
+                return await response.Content.ReadFromJsonAsync<T>(_serializerOptions).ConfigureAwait(false);
 
             return default;
         }

@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+using Wilma.Api.Model;
 using Wilma.Api.Wilma;
 using Wilma.Api.Wilma.Enum;
 
@@ -45,6 +46,11 @@ namespace Wilma.Api
             var messages = await WAPI.GetAsync<IEnumerable<Message>>(_session,
                 _role.Slug + "/messages/" + messageId).ConfigureAwait(false);
             return messages.First();
+        }
+
+        public Task<RecipientResponse> GetAllRecipientsAsync()
+        {
+            return WAPI.GetAsync<RecipientResponse>(_session, _role.Slug + "/messages/recipients");
         }
 
         /// <summary>
