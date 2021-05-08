@@ -6,21 +6,25 @@
     public enum MessageFolder
     {
         /// <summary>
-        /// Represents a message that we have received.
+        /// Represents the received messages.
         /// </summary>
         Inbox,
         /// <summary>
-        /// Represents a messages sent by us.
+        /// Represents messages sent by us.
         /// </summary>
         Outbox,
         /// <summary>
-        /// Represents an archived message.
+        /// Represents the archived messages.
         /// </summary>
         Archive,
         /// <summary>
-        /// Represents an drafted message.
+        /// Represents the drafted messages.
         /// </summary>
         Drafts,
+        /// <summary>
+        /// Represents the messages in the <see cref="Inbox"/> folder that have <see cref="Message.IsEvent"/> set to true.
+        /// </summary>
+        Appointments,
         /// <summary>
         /// Contains all of the message folders.
         /// </summary>
