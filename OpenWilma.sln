@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30404.54
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenWilma", "OpenWilma\OpenWilma.csproj", "{32012B4E-3406-4062-996C-49BE44A8E37A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32012B4E-3406-4062-996C-49BE44A8E37A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32012B4E-3406-4062-996C-49BE44A8E37A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32012B4E-3406-4062-996C-49BE44A8E37A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32012B4E-3406-4062-996C-49BE44A8E37A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {836BAAB4-1715-43AB-99C2-2234DE280590}
+	EndGlobalSection
+EndGlobal
