@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 	</PropertyGroup>
+
 	<PropertyGroup>
 		<Authors>Paulus Pärssinen</Authors>
 		<Description>Unofficial .NET library for Wilma API</Description>
 
-		<Version>0.1.0</Version>
-		<FileVersion>0.1.0</FileVersion>
-		<AssemblyVersion>0.1.0</AssemblyVersion>
+		<Version>0.2.0</Version>
+		<FileVersion>0.2.0</FileVersion>
+		<AssemblyVersion>0.2.0</AssemblyVersion>
 
 		<RepositoryUrl>https://github.com/OpenWilma/openwilma_dotnet</RepositoryUrl>
 		<PackageProjectUrl>https://openwilma.testausserveri.fi</PackageProjectUrl>
