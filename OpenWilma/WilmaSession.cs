@@ -1,25 +1,22 @@
-﻿using System.Collections.Generic;
-
-using OpenWilma.Model;
+﻿using OpenWilma.Model;
 using OpenWilma.Wilma;
 
-namespace OpenWilma
+namespace OpenWilma;
+
+public class WilmaSession : IWilmaSession
 {
-    public class WilmaSession
+    public IWilmaContext Context { get; }
+
+    public int ApiVersion { get; set; }
+    public string FormKey { get; set; }
+    public IEnumerable<Role> Roles { get; }
+
+    public WilmaSession(IWilmaContext context, IndexResponse data)
     {
-        public WilmaContext Context { get; }
-        
-        public int ApiVersion { get; set; }
-        public string FormKey { get; set; }
-        public IEnumerable<Role> Roles { get; }
+        Context = context;
 
-        public WilmaSession(WilmaContext context, IndexResponse data)
-        {
-            Context = context;
-
-            Roles = data.Roles;
-            FormKey = data.FormKey;
-            ApiVersion = data.ApiVersion;
-        }
+        Roles = data.Roles;
+        FormKey = data.FormKey;
+        ApiVersion = data.ApiVersion;
     }
 }

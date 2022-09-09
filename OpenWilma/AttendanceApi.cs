@@ -1,30 +1,43 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using OpenWilma.Wilma;
 
-using OpenWilma.Wilma;
+namespace OpenWilma;
 
-namespace OpenWilma
+public class AttendanceApi : IAttendanceApi
 {
-    public class AttendanceApi
+    private readonly Role _role;
+    private readonly IWilmaSession _session;
+
+    public AttendanceApi(IWilmaSession session, Role role)
+        => (_session, _role) = (session, role);
+
+    public Task<IEnumerable<Observation>> GetLessonNotesAsync(DateTime? date = default)
     {
-        private readonly Role _role;
-        private readonly WilmaSession _session;
+        string path = "/attendance/index_json";
 
-        public AttendanceApi(WilmaSession session, Role role)
+        if (date is not null)
+            path += $"?date={date:d.M.yyyy}";
+
+        return WAPI.GetAsync<IEnumerable<Observation>>(_session, _role.Slug + path);
+    }
+
+    public Task<IEnumerable<Observation>> GetStudentLessonNotesAsync(int studentId)
+    {
+        return WAPI.GetAsync<IEnumerable<Observation>>(_session, _role.Slug + "/attendance/index_json/student/" + studentId);
+    }
+
+    public Task<string> SaveNoteExcuseAsync(int lessoneNoteId, int excuseId, string excuseText = default)
+    {
+        var parameters = new Dictionary<string, string>
         {
-            _session = session;
-            _role = role;
-        }
+            { "item" + lessoneNoteId, "true" },
+            { "text", excuseText },
+            { "type", excuseId.ToString() }
+        };
 
-        public Task<IEnumerable<Observation>> GetLessonNotesAsync(DateTime? date = default)
-        {
-            string path = "/attendance/index_json";
-            
-            if (date is not null)
-                path += "?date={date:d.M.yyyy}";
-
-            return WAPI.GetAsync<IEnumerable<Observation>>(_session, _role.Slug + path);
-        }
+        return WAPI.PostAsync<string>(_session, _role.Slug + "/attendance/saveexcuse", parameters);
+    }
+    public Task<string> GetReportInfoAsync()
+    {
+        return WAPI.GetAsync<string>(_session, _role.Slug + "/attendance");
     }
 }

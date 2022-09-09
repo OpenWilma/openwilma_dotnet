@@ -1,28 +1,21 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using OpenWilma.Wilma;
 
-using OpenWilma.Wilma;
+namespace OpenWilma;
 
-namespace OpenWilma
+public class GroupApi : IGroupApi
 {
-    public class GroupApi
-    {
-        private readonly Role _role;
-        private readonly WilmaSession _session;
+    private readonly Role _role;
+    private readonly IWilmaSession _session;
 
-        public GroupApi(WilmaSession session, Role role)
-        {
-            _role = role;
-            _session = session;
-        }
+    public GroupApi(IWilmaSession session, Role role)
+        => (_session, _role) = (session, role);
 
-        public Task<IEnumerable<Group>> GetGroupsAsync()
-            => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json");
-        
-        public Task<IEnumerable<Group>> GetPastGroupsAsync()
-            => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json/past");
-        
-        public Task<IEnumerable<Group>> GetFutureGroupsAsync()
-            => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json/future");
-    }
+    public Task<IEnumerable<Group>> GetGroupsAsync()
+        => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json");
+
+    public Task<IEnumerable<Group>> GetPastGroupsAsync()
+        => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json/past");
+
+    public Task<IEnumerable<Group>> GetFutureGroupsAsync()
+        => WAPI.GetAsync<IEnumerable<Group>>(_session, _role.Slug + "/groups/index_json/future");
 }

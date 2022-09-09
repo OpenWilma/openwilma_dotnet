@@ -2,7 +2,7 @@
 
 namespace OpenWilma;
 
-public class WilmaContext
+public class WilmaContext : IWilmaContext
 {
     public string Url { get; }
     public string Key { get; }
