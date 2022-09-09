@@ -1,9 +1,8 @@
-﻿namespace OpenWilma.Wilma.Enum
+﻿namespace OpenWilma.Wilma;
+
+public enum LoginResult
 {
-    public enum LoginResult
-    {
-        Unknown,
-        Ok,
-        Failed
-    }
+    Unknown,
+    Ok,
+    Failed
 }

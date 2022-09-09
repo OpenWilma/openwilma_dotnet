@@ -1,18 +1,15 @@
-﻿using System;
+﻿namespace OpenWilma.Wilma;
 
 #nullable enable
-namespace OpenWilma.Wilma
+public record ExamRecord
 {
-    public class ExamRecord
-    {
-        public DateTime Date { get; set; }
-        
-        public string? Name { get; set; }
-        public string? Caption { get; set; }
-        public string? Topic { get; set; }
-        
-        public string? Info { get; set; }
-        public string? Grade { get; set; }
-        public string? VerbalGrade { get; set; }
-    }
+    public DateTime Date { get; set; }
+
+    public string? Name { get; set; }
+    public string? Caption { get; set; }
+    public string? Topic { get; set; }
+
+    public string? Info { get; set; }
+    public string? Grade { get; set; }
+    public string? VerbalGrade { get; set; }
 }

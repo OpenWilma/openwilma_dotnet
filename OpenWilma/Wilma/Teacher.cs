@@ -1,10 +1,3 @@
-﻿namespace OpenWilma.Wilma
-{
-    public class Teacher
-    {
-        public int Id { get; set; }
-        public string Caption { get; set; }
-        public string LongCaption { get; set; }
-        public bool ScheduleVisible { get; set; }
-    }
-}
+﻿namespace OpenWilma.Wilma;
+
+public record Teacher(int Id, string Caption, string LongCaption, bool ScheduleVisible);

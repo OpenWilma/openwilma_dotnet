@@ -1,7 +1,3 @@
-﻿namespace OpenWilma.Wilma
-{
-    public class School
-    {
-        public string Caption { get; set; }
-    }
-}
+﻿namespace OpenWilma.Wilma;
+
+public record School(string Caption);

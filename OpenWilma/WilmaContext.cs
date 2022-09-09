@@ -1,26 +1,23 @@
-﻿using System;
+﻿using OpenWilma.Wilma;
 
-using OpenWilma.Wilma;
-using OpenWilma.Wilma.Enum;
+namespace OpenWilma;
 
-namespace OpenWilma
+public class WilmaContext
 {
-    public class WilmaContext
+    public string Url { get; }
+    public string Key { get; }
+    public Language Language { get; set; }
+
+    public WilmaContext(WilmaServer server, string key, Language language = Language.English)
+        : this(server.Url, key, language)
+    { }
+    public WilmaContext(string url, string key, Language language = Language.English)
     {
-        private const string MISSING_API_KEY = "You have to specify the API key in order to use Wilma's API";
+        ArgumentNullException.ThrowIfNull(url);
+        ArgumentNullException.ThrowIfNull(key);
 
-        public string Url { get; }
-        public string Key { get; }
-        public Language Language { get; set; }
-
-        public WilmaContext(WilmaServer server, string key, Language language = Language.English)
-            : this(server.Url, key, language)
-        { }
-        public WilmaContext(string url, string key, Language language = Language.English)
-        {
-            Url = url;
-            Key = key ?? throw new ArgumentNullException(nameof(key), MISSING_API_KEY);
-            Language = language;
-        }
+        Url = url;
+        Key = key;
+        Language = language;
     }
 }

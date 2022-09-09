@@ -1,9 +1,8 @@
-﻿namespace OpenWilma.Wilma
+﻿namespace OpenWilma.Wilma;
+
+public enum ReservationType
 {
-    public enum ReservationType
-    {
-        Suggested,
-        Reserved,
-        Cancelled
-    }
+    Suggested,
+    Reserved,
+    Cancelled
 }

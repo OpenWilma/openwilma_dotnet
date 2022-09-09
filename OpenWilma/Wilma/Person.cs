@@ -1,8 +1,3 @@
-﻿namespace OpenWilma.Wilma
-{
-    public class Person
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-    }
-}
+﻿namespace OpenWilma.Wilma;
+
+public record Person(string FirstName, string LastName);

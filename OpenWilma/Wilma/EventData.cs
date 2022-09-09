@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
+﻿namespace OpenWilma.Wilma;
 
-namespace OpenWilma.Wilma
+public record EventData
 {
-    public class EventData
-    {
-        public bool MustApply { get; set; }
-        public IEnumerable<Event> Events { get; set; }
-    }
+    public bool MustApply { get; set; }
+    public IEnumerable<Event> Events { get; set; }
 }

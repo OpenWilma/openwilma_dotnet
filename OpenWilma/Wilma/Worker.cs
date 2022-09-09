@@ -1,7 +1,3 @@
-﻿namespace OpenWilma.Wilma
-{
-    public class Worker
-    {
-        public string Url { get; set; }
-    }
-}
+﻿namespace OpenWilma.Wilma;
+
+public record Worker(string Url);

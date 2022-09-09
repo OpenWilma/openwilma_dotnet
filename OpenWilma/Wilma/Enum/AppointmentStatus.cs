@@ -1,14 +1,13 @@
-﻿namespace OpenWilma.Wilma
+﻿namespace OpenWilma.Wilma;
+
+public enum AppointmentStatus
 {
-    public enum AppointmentStatus
-    {
-		Undefined,
-		Available,
-		SelectedCancellable,
-		Selected,
-		Full,
-		Pending,
-		Expired,
-		SelectedOther
-	}
+    Undefined,
+    Available,
+    SelectedCancellable,
+    Selected,
+    Full,
+    Pending,
+    Expired,
+    SelectedOther
 }

@@ -1,10 +1,3 @@
-﻿using System;
+﻿namespace OpenWilma.Wilma;
 
-namespace OpenWilma.Wilma
-{
-    public class HomeworkRecord
-    {
-        public DateTime Date { get; set; }
-        public string Homework { get; set; }
-    }
-}
+public record HomeworkRecord(DateTime Date, string Homework);

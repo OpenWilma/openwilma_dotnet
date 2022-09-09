@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
+﻿namespace OpenWilma.Wilma;
 
-namespace OpenWilma.Wilma
+public record BasicSchedule
 {
-    public class BasicSchedule
-    {
-        public IEnumerable<Reservation> Schedule { get; set; }
-        public IEnumerable<Term> Terms { get; set; }
-    }
+    public IEnumerable<Reservation> Schedule { get; set; }
+    public IEnumerable<Term> Terms { get; set; }
 }
