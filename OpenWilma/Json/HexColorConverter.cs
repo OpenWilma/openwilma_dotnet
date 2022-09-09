@@ -1,26 +1,26 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Text.Json;
-using System.Globalization;
+using System.Buffers.Text;
 using System.Text.Json.Serialization;
 
-namespace OpenWilma.Json
+namespace OpenWilma.Json;
+
+internal sealed class HexColorConverter : JsonConverter<Color>
 {
-    public class HexColorConverter : JsonConverter<Color>
+    public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        // Parse '#'-prefixed hex string as integer. Expected format is "#RRGGBB".
+        if (reader.TokenType == JsonTokenType.String &&
+            reader.ValueSpan.Length == 7 &&
+            reader.ValueSpan[0] == '#' &&
+            Utf8Parser.TryParse(reader.ValueSpan.Slice(1, 6), out int value, out _, 'x'))
         {
-            ReadOnlySpan<char> hex = reader.GetString();
-
-            return Color.FromArgb(
-                int.Parse(hex[1..2], NumberStyles.HexNumber),
-                int.Parse(hex[3..4], NumberStyles.HexNumber), 
-                int.Parse(hex[5..6], NumberStyles.HexNumber));
+            // Mask alpha to 0xFF
+            return Color.FromArgb(value | (0xFF << 24));
         }
-
-        public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options)
-        {
-            throw new NotImplementedException();
-        }
+        else return default;
     }
+
+    public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options)
+        => throw new NotImplementedException();
 }
