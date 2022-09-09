@@ -17,7 +17,7 @@ namespace OpenWilma
     public static class WAPI
     {
         private const string USER_AGENT = "OpenWilma/1.0.0.dotnet";
-        private const string OFFICIAL_SERVERS_ENDPOINT = "https://www.starsoft.fi/wilmat/wilmat.json";
+        private const string OFFICIAL_SERVERS_ENDPOINT = "https://wilmahub.service.inschool.fi/wilmat";
 
         private readonly static HttpClient _client;
         private readonly static JsonSerializerOptions _serializerOptions;
